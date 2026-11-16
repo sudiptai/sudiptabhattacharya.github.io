@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dr. Sudipta Bhattacharya | Speech emotion recognition for Indic languages</title>
+<meta name="description" content="Dr. Sudipta Bhattacharya, Associate Professor of CSE (AIML) at the Institute of Engineering and Management, Kolkata. Research on speech emotion recognition for Bengali, Hindi and other low-resource languages.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wdth,wght@75..125,400..800&family=Anek+Devanagari:wght@500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#1d2466;      /* Bengal indigo */
+  --indigo-deep:#12163f;
+  --indigo-soft:#e9ebf7;
+  --marigold:#f5a800;
+  --marigold-deep:#b97a00;
+  --paper:#f6f7fc;
+  --ink:#171a33;
+  --muted:#565b7c;
+  --line:#cfd3ea;
+  --display:"Anek Bangla","Anek Latin","Segoe UI",system-ui,sans-serif;
+  --body:"Newsreader",Georgia,"Times New Roman",serif;
+  --measure:66ch;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:1.16rem;line-height:1.62}
+a{color:var(--indigo);text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:var(--marigold-deep)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--marigold);outline-offset:3px;border-radius:2px}
+img{max-width:100%;display:block}
+.wrap{width:min(1120px,100% - 2.5rem);margin-inline:auto}
+
+/* ---------- top bar ---------- */
+.top{position:absolute;inset:0 0 auto 0;z-index:5}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:1.1rem;gap:1rem}
+.top .mark{font-family:var(--display);font-weight:700;color:#fff;text-decoration:none;font-size:1.05rem;letter-spacing:.01em}
+.top nav{display:flex;gap:1.4rem;flex-wrap:wrap}
+.top nav a{font-family:var(--display);color:#d9dcf5;text-decoration:none;font-size:1rem;font-weight:500}
+.top nav a:hover{color:var(--marigold)}
+
+/* ---------- hero ---------- */
+.hero{background:var(--indigo);color:#fff;position:relative;overflow:hidden;padding:6.5rem 0 0}
+.hero-grid{display:grid;grid-template-columns:1fr 250px;gap:3rem;align-items:end}
+.bn{font-family:var(--display);font-weight:500;color:var(--marigold);font-size:1.5rem;margin:0 0 .3rem}
+h1{font-family:var(--display);font-weight:800;font-stretch:80%;font-size:clamp(3rem,9.4vw,7.6rem);line-height:.9;letter-spacing:-.015em;margin:0}
+.lede{font-size:clamp(1.2rem,2.1vw,1.5rem);line-height:1.45;max-width:34ch;margin:1.6rem 0 0;color:#eef0ff}
+.role{font-family:var(--display);font-size:1.08rem;font-weight:500;color:#c9cdf0;margin:1rem 0 0;max-width:46ch;line-height:1.4}
+.actions{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.8rem}
+.btn{font-family:var(--display);font-weight:600;font-size:1.05rem;text-decoration:none;padding:.62rem 1.15rem .5rem;border-radius:999px;border:1.5px solid var(--marigold);color:var(--indigo-deep);background:var(--marigold)}
+.btn:hover{background:#ffc02e;color:var(--indigo-deep)}
+.btn.ghost{background:transparent;color:#fff;border-color:#7f86c9}
+.btn.ghost:hover{border-color:var(--marigold);color:var(--marigold);background:transparent}
+.portrait{border-radius:130px 130px 0 0;overflow:hidden;background:#fff;border:5px solid var(--marigold);border-bottom:0;width:250px}
+.portrait img{width:100%;height:auto}
+
+/* waveform: one utterance, labelled with emotions in three languages */
+.wave{margin-top:2.6rem;background:var(--indigo-deep);padding:1.6rem 0 1.1rem}
+.wave svg{width:100%;height:auto;display:block;overflow:visible}
+.wave rect{fill:var(--marigold);transform-box:fill-box;transform-origin:center;animation:speak .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*7ms + 250ms)}
+@keyframes speak{from{transform:scaleY(.02);opacity:.2}to{transform:scaleY(1);opacity:1}}
+.tags{display:grid;grid-template-columns:47fr 37fr 55fr 39fr;gap:0 1.5%;margin-top:.5rem;font-family:var(--display);color:#c9cdf0;font-size:.98rem}
+.tags span{border-top:1.5px solid #4d55a8;padding-top:.35rem;line-height:1.25}
+.tags b{color:#fff;font-weight:600;display:block}
+.tags .hi{font-family:"Anek Devanagari",var(--display)}
+.wave figcaption{font-family:var(--display);color:#9aa0d6;font-size:.92rem;margin-top:.9rem}
+
+/* ---------- sections ---------- */
+section{padding:4.6rem 0}
+section + section{border-top:1px solid var(--line)}
+h2{font-family:var(--display);font-weight:800;font-stretch:82%;font-size:clamp(2rem,4.4vw,3.1rem);line-height:1;margin:0 0 1.6rem;color:var(--indigo)}
+h3{font-family:var(--display);font-weight:700;font-size:1.3rem;line-height:1.2;margin:0 0 .35rem;color:var(--ink)}
+p{margin:0 0 1rem;max-width:var(--measure)}
+.split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,4fr);gap:3.5rem;align-items:start}
+.facts{margin:0;padding:0;list-style:none;font-family:var(--display);font-size:1.06rem;line-height:1.35}
+.facts li{padding:.75rem 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:5.2rem 1fr;gap:1rem}
+.facts li:first-child{border-top:3px solid var(--marigold)}
+.facts span{color:var(--muted)}
+
+.areas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.2rem 3.5rem;margin:0;padding:0;list-style:none}
+.areas li{border-left:4px solid var(--marigold);padding-left:1.1rem}
+.areas p{margin:0;color:#2c3052}
+
+.band{background:var(--indigo-soft)}
+.grant{display:grid;grid-template-columns:auto 1fr;gap:2.5rem;align-items:center}
+.grant .amt{font-family:var(--display);font-weight:800;font-stretch:80%;font-size:clamp(2.6rem,6vw,4.4rem);line-height:1;color:var(--indigo)}
+.grant .amt small{display:block;font-size:1rem;font-weight:500;font-stretch:100%;color:var(--muted);margin-top:.3rem}
+
+.pubs{list-style:none;margin:0;padding:0}
+.pubs li{display:grid;grid-template-columns:4.2rem 1fr;gap:1.2rem;padding:1rem 0;border-bottom:1px solid var(--line)}
+.pubs .yr{font-family:var(--display);font-weight:700;color:var(--marigold-deep);font-size:1.1rem;padding-top:.1rem}
+.pubs .t{font-weight:600;display:block;line-height:1.35}
+.pubs .v{color:var(--muted);font-size:1.04rem;display:block;margin-top:.15rem}
+.pubs .st{font-family:var(--display);font-size:.9rem;font-weight:600;background:var(--marigold);color:var(--indigo-deep);padding:.1rem .5rem 0;border-radius:4px;margin-left:.4rem;white-space:nowrap}
+.sub{font-family:var(--display);font-weight:700;font-size:1.45rem;margin:2.8rem 0 .4rem;color:var(--ink)}
+.sub:first-of-type{margin-top:0}
+
+.repos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem;list-style:none;margin:0;padding:0}
+.repos a{display:block;height:100%;background:#fff;border:1px solid var(--line);border-top:4px solid var(--indigo);padding:1.2rem 1.2rem 1.1rem;text-decoration:none;color:var(--ink)}
+.repos a:hover{border-top-color:var(--marigold);color:var(--ink)}
+.repos code{font-family:var(--display);font-weight:700;font-size:1.08rem;color:var(--indigo);display:block;margin-bottom:.4rem;overflow-wrap:anywhere}
+.repos span{font-size:1.02rem;line-height:1.45;display:block}
+
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3.5rem}
+.plain{margin:0;padding-left:1.1rem}
+.plain li{margin-bottom:.55rem;max-width:var(--measure)}
+.plain li::marker{color:var(--marigold-deep)}
+
+.path{list-style:none;margin:0;padding:0;border-left:2px solid var(--indigo)}
+.path li{position:relative;padding:0 0 1.7rem 1.6rem}
+.path li:last-child{padding-bottom:0}
+.path li::before{content:"";position:absolute;left:-8px;top:.45rem;width:14px;height:14px;border-radius:50%;background:var(--marigold);border:2px solid var(--indigo)}
+.path time{font-family:var(--display);font-weight:600;color:var(--marigold-deep);display:block}
+.path p{margin:.1rem 0 0;color:#2c3052}
+
+/* ---------- contact / footer ---------- */
+.contact{background:var(--indigo);color:#fff;border-top:0}
+.contact h2{color:#fff}
+.contact p{color:#e3e6fb}
+.mail{font-family:var(--display);font-weight:700;font-stretch:85%;font-size:clamp(1.35rem,4.4vw,2.9rem);color:var(--marigold);text-decoration:none;overflow-wrap:anywhere;line-height:1.1}
+.mail:hover{color:#fff}
+.links{display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;margin:1.8rem 0 0;padding:0;list-style:none;font-family:var(--display);font-size:1.1rem}
+.links a{color:#fff}
+.links a:hover{color:var(--marigold)}
+footer{background:var(--indigo-deep);color:#9aa0d6;font-family:var(--display);font-size:.95rem;padding:1.2rem 0}
+
+@media (max-width:860px){
+  body{font-size:1.08rem}
+  .top nav{display:none}
+  .hero{padding-top:4.8rem}
+  .hero-grid{grid-template-columns:1fr;gap:2rem}
+  .portrait{width:170px;border-radius:90px 90px 0 0;order:-1;border-bottom:5px solid var(--marigold);border-radius:90px}
+  .wave{margin-top:2rem}
+  .tags{grid-template-columns:1fr 1fr;gap:.8rem 4%}
+  .split,.cols,.areas,.repos{grid-template-columns:1fr;gap:2rem}
+  .grant{grid-template-columns:1fr;gap:1rem}
+  section{padding:3.2rem 0}
+  .pubs li{grid-template-columns:3.3rem 1fr;gap:.8rem}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .wave rect{animation:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#top">Sudipta Bhattacharya</a>
+    <nav aria-label="Sections">
+      <a href="#research">Research</a>
+      <a href="#publications">Publications</a>
+      <a href="#code">Code</a>
+      <a href="#teaching">Teaching</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<div class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="bn" lang="bn">সুদীপ্ত ভট্টাচার্য</p>
+      <h1>Dr. Sudipta Bhattacharya</h1>
+      <p class="lede">I teach machines to hear how people feel, in Bengali, Hindi and English.</p>
+      <p class="role">Associate Professor, Computer Science and Engineering (AIML), Institute of Engineering and Management, Kolkata</p>
+      <div class="actions">
+        <a class="btn" href="#publications">Read the publications</a>
+        <a class="btn ghost" href="#contact">Get in touch</a>
+      </div>
+    </div>
+    <div class="portrait"><img src="sudipta.jpg" width="282" height="351" alt="Portrait of Dr. Sudipta Bhattacharya"></div>
+  </div>
+
+  <figure class="wave" style="margin-inline:0;margin-bottom:0">
+    <div class="wrap">
+      <svg viewBox="0 0 1200 180" role="img" aria-label="An illustrated speech waveform divided into four stretches, each labelled with an emotion"><rect x="0" y="89.0" width="3" height="2.0" rx="1.5" style="--i:0"/><rect x="6" y="81.5" width="3" height="17.0" rx="1.5" style="--i:1"/><rect x="12" y="78.9" width="3" height="22.1" rx="1.5" style="--i:2"/><rect x="18" y="72.8" width="3" height="34.3" rx="1.5" style="--i:3"/><rect x="24" y="70.1" width="3" height="39.9" rx="1.5" style="--i:4"/><rect x="30" y="64.3" width="3" height="51.4" rx="1.5" style="--i:5"/><rect x="36" y="65.6" width="3" height="48.9" rx="1.5" style="--i:6"/><rect x="42" y="59.3" width="3" height="61.5" rx="1.5" style="--i:7"/><rect x="48" y="58.4" width="3" height="63.2" rx="1.5" style="--i:8"/><rect x="54" y="59.1" width="3" height="61.7" rx="1.5" style="--i:9"/><rect x="60" y="51.5" width="3" height="77.0" rx="1.5" style="--i:10"/><rect x="66" y="64.2" width="3" height="51.5" rx="1.5" style="--i:11"/><rect x="72" y="40.2" width="3" height="99.6" rx="1.5" style="--i:12"/><rect x="78" y="54.4" width="3" height="71.3" rx="1.5" style="--i:13"/><rect x="84" y="42.6" width="3" height="94.8" rx="1.5" style="--i:14"/><rect x="90" y="53.3" width="3" height="73.3" rx="1.5" style="--i:15"/><rect x="96" y="32.0" width="3" height="115.9" rx="1.5" style="--i:16"/><rect x="102" y="33.5" width="3" height="113.1" rx="1.5" style="--i:17"/><rect x="108" y="34.9" width="3" height="110.3" rx="1.5" style="--i:18"/><rect x="114" y="36.3" width="3" height="107.4" rx="1.5" style="--i:19"/><rect x="120" y="32.2" width="3" height="115.6" rx="1.5" style="--i:20"/><rect x="126" y="39.0" width="3" height="102.1" rx="1.5" style="--i:21"/><rect x="132" y="41.1" width="3" height="97.9" rx="1.5" style="--i:22"/><rect x="138" y="31.4" width="3" height="117.3" rx="1.5" style="--i:23"/><rect x="144" y="58.4" width="3" height="63.3" rx="1.5" style="--i:24"/><rect x="150" y="35.3" width="3" height="109.4" rx="1.5" style="--i:25"/><rect x="156" y="52.1" width="3" height="75.8" rx="1.5" style="--i:26"/><rect x="162" y="22.8" width="3" height="134.3" rx="1.5" style="--i:27"/><rect x="168" y="49.0" width="3" height="82.1" rx="1.5" style="--i:28"/><rect x="174" y="33.2" width="3" height="113.6" rx="1.5" style="--i:29"/><rect x="180" y="37.6" width="3" height="104.8" rx="1.5" style="--i:30"/><rect x="186" y="44.1" width="3" height="91.9" rx="1.5" style="--i:31"/><rect x="192" y="37.8" width="3" height="104.3" rx="1.5" style="--i:32"/><rect x="198" y="56.4" width="3" height="67.3" rx="1.5" style="--i:33"/><rect x="204" y="47.8" width="3" height="84.5" rx="1.5" style="--i:34"/><rect x="210" y="62.2" width="3" height="55.5" rx="1.5" style="--i:35"/><rect x="216" y="40.9" width="3" height="98.2" rx="1.5" style="--i:36"/><rect x="222" y="65.5" width="3" height="49.1" rx="1.5" style="--i:37"/><rect x="228" y="52.7" width="3" height="74.7" rx="1.5" style="--i:38"/><rect x="234" y="63.5" width="3" height="53.0" rx="1.5" style="--i:39"/><rect x="240" y="58.6" width="3" height="62.8" rx="1.5" style="--i:40"/><rect x="246" y="68.0" width="3" height="44.0" rx="1.5" style="--i:41"/><rect x="252" y="65.0" width="3" height="50.1" rx="1.5" style="--i:42"/><rect x="258" y="70.2" width="3" height="39.7" rx="1.5" style="--i:43"/><rect x="264" y="78.5" width="3" height="23.1" rx="1.5" style="--i:44"/><rect x="270" y="80.5" width="3" height="19.0" rx="1.5" style="--i:45"/><rect x="276" y="89.0" width="3" height="2.0" rx="1.5" style="--i:46"/><rect x="282" y="87.0" width="3" height="6.0" rx="1.5" style="--i:47"/><rect x="288" y="87.0" width="3" height="6.0" rx="1.5" style="--i:48"/><rect x="294" y="87.0" width="3" height="6.0" rx="1.5" style="--i:49"/><rect x="300" y="87.0" width="3" height="6.0" rx="1.5" style="--i:50"/><rect x="306" y="87.0" width="3" height="6.0" rx="1.5" style="--i:51"/><rect x="312" y="89.0" width="3" height="2.0" rx="1.5" style="--i:52"/><rect x="318" y="83.6" width="3" height="12.8" rx="1.5" style="--i:53"/><rect x="324" y="82.0" width="3" height="16.0" rx="1.5" style="--i:54"/><rect x="330" y="76.4" width="3" height="27.3" rx="1.5" style="--i:55"/><rect x="336" y="76.9" width="3" height="26.2" rx="1.5" style="--i:56"/><rect x="342" y="75.8" width="3" height="28.4" rx="1.5" style="--i:57"/><rect x="348" y="67.1" width="3" height="45.7" rx="1.5" style="--i:58"/><rect x="354" y="76.4" width="3" height="27.2" rx="1.5" style="--i:59"/><rect x="360" y="64.4" width="3" height="51.1" rx="1.5" style="--i:60"/><rect x="366" y="77.0" width="3" height="25.9" rx="1.5" style="--i:61"/><rect x="372" y="59.3" width="3" height="61.3" rx="1.5" style="--i:62"/><rect x="378" y="67.4" width="3" height="45.1" rx="1.5" style="--i:63"/><rect x="384" y="58.7" width="3" height="62.6" rx="1.5" style="--i:64"/><rect x="390" y="61.0" width="3" height="58.0" rx="1.5" style="--i:65"/><rect x="396" y="61.7" width="3" height="56.6" rx="1.5" style="--i:66"/><rect x="402" y="58.0" width="3" height="63.9" rx="1.5" style="--i:67"/><rect x="408" y="60.7" width="3" height="58.7" rx="1.5" style="--i:68"/><rect x="414" y="56.1" width="3" height="67.8" rx="1.5" style="--i:69"/><rect x="420" y="65.2" width="3" height="49.5" rx="1.5" style="--i:70"/><rect x="426" y="51.4" width="3" height="77.2" rx="1.5" style="--i:71"/><rect x="432" y="65.7" width="3" height="48.5" rx="1.5" style="--i:72"/><rect x="438" y="56.1" width="3" height="67.8" rx="1.5" style="--i:73"/><rect x="444" y="68.3" width="3" height="43.4" rx="1.5" style="--i:74"/><rect x="450" y="62.8" width="3" height="54.4" rx="1.5" style="--i:75"/><rect x="456" y="65.4" width="3" height="49.1" rx="1.5" style="--i:76"/><rect x="462" y="59.9" width="3" height="60.3" rx="1.5" style="--i:77"/><rect x="468" y="61.9" width="3" height="56.3" rx="1.5" style="--i:78"/><rect x="474" y="63.4" width="3" height="53.3" rx="1.5" style="--i:79"/><rect x="480" y="68.5" width="3" height="43.1" rx="1.5" style="--i:80"/><rect x="486" y="72.3" width="3" height="35.5" rx="1.5" style="--i:81"/><rect x="492" y="67.9" width="3" height="44.1" rx="1.5" style="--i:82"/><rect x="498" y="79.3" width="3" height="21.4" rx="1.5" style="--i:83"/><rect x="504" y="73.8" width="3" height="32.5" rx="1.5" style="--i:84"/><rect x="510" y="83.3" width="3" height="13.4" rx="1.5" style="--i:85"/><rect x="516" y="81.1" width="3" height="17.8" rx="1.5" style="--i:86"/><rect x="522" y="86.5" width="3" height="7.1" rx="1.5" style="--i:87"/><rect x="528" y="89.0" width="3" height="2.0" rx="1.5" style="--i:88"/><rect x="534" y="87.0" width="3" height="6.0" rx="1.5" style="--i:89"/><rect x="540" y="87.0" width="3" height="6.0" rx="1.5" style="--i:90"/><rect x="546" y="87.0" width="3" height="6.0" rx="1.5" style="--i:91"/><rect x="552" y="87.0" width="3" height="6.0" rx="1.5" style="--i:92"/><rect x="558" y="87.0" width="3" height="6.0" rx="1.5" style="--i:93"/><rect x="564" y="87.0" width="3" height="6.0" rx="1.5" style="--i:94"/><rect x="570" y="87.0" width="3" height="6.0" rx="1.5" style="--i:95"/><rect x="576" y="89.0" width="3" height="2.0" rx="1.5" style="--i:96"/><rect x="582" y="83.3" width="3" height="13.5" rx="1.5" style="--i:97"/><rect x="588" y="83.2" width="3" height="13.7" rx="1.5" style="--i:98"/><rect x="594" y="72.2" width="3" height="35.6" rx="1.5" style="--i:99"/><rect x="600" y="78.3" width="3" height="23.3" rx="1.5" style="--i:100"/><rect x="606" y="68.9" width="3" height="42.1" rx="1.5" style="--i:101"/><rect x="612" y="69.0" width="3" height="42.1" rx="1.5" style="--i:102"/><rect x="618" y="61.6" width="3" height="56.7" rx="1.5" style="--i:103"/><rect x="624" y="59.2" width="3" height="61.5" rx="1.5" style="--i:104"/><rect x="630" y="60.1" width="3" height="59.7" rx="1.5" style="--i:105"/><rect x="636" y="58.6" width="3" height="62.9" rx="1.5" style="--i:106"/><rect x="642" y="64.8" width="3" height="50.4" rx="1.5" style="--i:107"/><rect x="648" y="52.5" width="3" height="75.0" rx="1.5" style="--i:108"/><rect x="654" y="62.8" width="3" height="54.3" rx="1.5" style="--i:109"/><rect x="660" y="39.7" width="3" height="100.6" rx="1.5" style="--i:110"/><rect x="666" y="64.7" width="3" height="50.6" rx="1.5" style="--i:111"/><rect x="672" y="49.9" width="3" height="80.2" rx="1.5" style="--i:112"/><rect x="678" y="57.5" width="3" height="65.0" rx="1.5" style="--i:113"/><rect x="684" y="49.0" width="3" height="82.0" rx="1.5" style="--i:114"/><rect x="690" y="47.8" width="3" height="84.4" rx="1.5" style="--i:115"/><rect x="696" y="45.4" width="3" height="89.2" rx="1.5" style="--i:116"/><rect x="702" y="46.1" width="3" height="87.8" rx="1.5" style="--i:117"/><rect x="708" y="57.4" width="3" height="65.1" rx="1.5" style="--i:118"/><rect x="714" y="39.6" width="3" height="100.7" rx="1.5" style="--i:119"/><rect x="720" y="57.2" width="3" height="65.6" rx="1.5" style="--i:120"/><rect x="726" y="34.9" width="3" height="110.2" rx="1.5" style="--i:121"/><rect x="732" y="53.9" width="3" height="72.2" rx="1.5" style="--i:122"/><rect x="738" y="32.6" width="3" height="114.8" rx="1.5" style="--i:123"/><rect x="744" y="52.5" width="3" height="75.0" rx="1.5" style="--i:124"/><rect x="750" y="36.3" width="3" height="107.5" rx="1.5" style="--i:125"/><rect x="756" y="44.8" width="3" height="90.4" rx="1.5" style="--i:126"/><rect x="762" y="50.0" width="3" height="80.1" rx="1.5" style="--i:127"/><rect x="768" y="37.1" width="3" height="105.8" rx="1.5" style="--i:128"/><rect x="774" y="43.9" width="3" height="92.2" rx="1.5" style="--i:129"/><rect x="780" y="35.2" width="3" height="109.7" rx="1.5" style="--i:130"/><rect x="786" y="50.9" width="3" height="78.1" rx="1.5" style="--i:131"/><rect x="792" y="43.4" width="3" height="93.2" rx="1.5" style="--i:132"/><rect x="798" y="62.7" width="3" height="54.6" rx="1.5" style="--i:133"/><rect x="804" y="50.1" width="3" height="79.9" rx="1.5" style="--i:134"/><rect x="810" y="60.6" width="3" height="58.7" rx="1.5" style="--i:135"/><rect x="816" y="54.0" width="3" height="71.9" rx="1.5" style="--i:136"/><rect x="822" y="64.1" width="3" height="51.8" rx="1.5" style="--i:137"/><rect x="828" y="56.7" width="3" height="66.6" rx="1.5" style="--i:138"/><rect x="834" y="62.3" width="3" height="55.4" rx="1.5" style="--i:139"/><rect x="840" y="61.1" width="3" height="57.9" rx="1.5" style="--i:140"/><rect x="846" y="64.4" width="3" height="51.3" rx="1.5" style="--i:141"/><rect x="852" y="70.5" width="3" height="39.1" rx="1.5" style="--i:142"/><rect x="858" y="65.9" width="3" height="48.2" rx="1.5" style="--i:143"/><rect x="864" y="75.5" width="3" height="29.0" rx="1.5" style="--i:144"/><rect x="870" y="68.5" width="3" height="42.9" rx="1.5" style="--i:145"/><rect x="876" y="81.0" width="3" height="18.0" rx="1.5" style="--i:146"/><rect x="882" y="72.1" width="3" height="35.9" rx="1.5" style="--i:147"/><rect x="888" y="81.6" width="3" height="16.8" rx="1.5" style="--i:148"/><rect x="894" y="83.8" width="3" height="12.5" rx="1.5" style="--i:149"/><rect x="900" y="89.0" width="3" height="2.0" rx="1.5" style="--i:150"/><rect x="906" y="87.0" width="3" height="6.0" rx="1.5" style="--i:151"/><rect x="912" y="87.0" width="3" height="6.0" rx="1.5" style="--i:152"/><rect x="918" y="87.0" width="3" height="6.0" rx="1.5" style="--i:153"/><rect x="924" y="87.0" width="3" height="6.0" rx="1.5" style="--i:154"/><rect x="930" y="87.0" width="3" height="6.0" rx="1.5" style="--i:155"/><rect x="936" y="87.0" width="3" height="6.0" rx="1.5" style="--i:156"/><rect x="942" y="87.0" width="3" height="6.0" rx="1.5" style="--i:157"/><rect x="948" y="89.0" width="3" height="2.0" rx="1.5" style="--i:158"/><rect x="954" y="87.4" width="3" height="5.1" rx="1.5" style="--i:159"/><rect x="960" y="83.8" width="3" height="12.3" rx="1.5" style="--i:160"/><rect x="966" y="82.3" width="3" height="15.4" rx="1.5" style="--i:161"/><rect x="972" y="77.2" width="3" height="25.7" rx="1.5" style="--i:162"/><rect x="978" y="79.1" width="3" height="21.8" rx="1.5" style="--i:163"/><rect x="984" y="76.8" width="3" height="26.3" rx="1.5" style="--i:164"/><rect x="990" y="77.1" width="3" height="25.7" rx="1.5" style="--i:165"/><rect x="996" y="77.8" width="3" height="24.4" rx="1.5" style="--i:166"/><rect x="1002" y="72.4" width="3" height="35.3" rx="1.5" style="--i:167"/><rect x="1008" y="77.2" width="3" height="25.5" rx="1.5" style="--i:168"/><rect x="1014" y="66.0" width="3" height="48.0" rx="1.5" style="--i:169"/><rect x="1020" y="78.9" width="3" height="22.3" rx="1.5" style="--i:170"/><rect x="1026" y="70.7" width="3" height="38.7" rx="1.5" style="--i:171"/><rect x="1032" y="71.8" width="3" height="36.3" rx="1.5" style="--i:172"/><rect x="1038" y="65.9" width="3" height="48.1" rx="1.5" style="--i:173"/><rect x="1044" y="73.4" width="3" height="33.3" rx="1.5" style="--i:174"/><rect x="1050" y="66.5" width="3" height="47.0" rx="1.5" style="--i:175"/><rect x="1056" y="71.9" width="3" height="36.3" rx="1.5" style="--i:176"/><rect x="1062" y="68.4" width="3" height="43.1" rx="1.5" style="--i:177"/><rect x="1068" y="62.3" width="3" height="55.3" rx="1.5" style="--i:178"/><rect x="1074" y="68.9" width="3" height="42.1" rx="1.5" style="--i:179"/><rect x="1080" y="63.9" width="3" height="52.2" rx="1.5" style="--i:180"/><rect x="1086" y="75.9" width="3" height="28.2" rx="1.5" style="--i:181"/><rect x="1092" y="67.2" width="3" height="45.7" rx="1.5" style="--i:182"/><rect x="1098" y="77.9" width="3" height="24.1" rx="1.5" style="--i:183"/><rect x="1104" y="65.6" width="3" height="48.9" rx="1.5" style="--i:184"/><rect x="1110" y="74.7" width="3" height="30.6" rx="1.5" style="--i:185"/><rect x="1116" y="68.5" width="3" height="43.0" rx="1.5" style="--i:186"/><rect x="1122" y="75.3" width="3" height="29.3" rx="1.5" style="--i:187"/><rect x="1128" y="75.5" width="3" height="29.0" rx="1.5" style="--i:188"/><rect x="1134" y="73.5" width="3" height="33.0" rx="1.5" style="--i:189"/><rect x="1140" y="75.8" width="3" height="28.3" rx="1.5" style="--i:190"/><rect x="1146" y="75.5" width="3" height="28.9" rx="1.5" style="--i:191"/><rect x="1152" y="81.1" width="3" height="17.8" rx="1.5" style="--i:192"/><rect x="1158" y="79.5" width="3" height="21.0" rx="1.5" style="--i:193"/><rect x="1164" y="85.5" width="3" height="9.1" rx="1.5" style="--i:194"/><rect x="1170" y="86.0" width="3" height="8.0" rx="1.5" style="--i:195"/><rect x="1176" y="89.0" width="3" height="2.0" rx="1.5" style="--i:196"/><rect x="1182" y="87.0" width="3" height="6.0" rx="1.5" style="--i:197"/><rect x="1188" y="87.0" width="3" height="6.0" rx="1.5" style="--i:198"/><rect x="1194" y="87.0" width="3" height="6.0" rx="1.5" style="--i:199"/></svg>
+      <div class="tags" aria-hidden="true">
+        <span><b lang="bn">আনন্দ</b>joy</span>
+        <span><b class="hi" lang="hi">शांत</b>calm</span>
+        <span><b lang="bn">রাগ</b>anger</span>
+        <span><b class="hi" lang="hi">उदासी</b>sadness</span>
+      </div>
+      <figcaption>The same sentence carries a different feeling each time it is spoken. Speech emotion recognition labels the feeling, not the words.</figcaption>
+    </div>
+  </figure>
+</div>
+
+<section id="about">
+  <div class="wrap split">
+    <div>
+      <h2>Two decades in the classroom, one question in the lab</h2>
+      <p>I have taught computer science to engineering students since 2007, and I joined the Institute of Engineering and Management as Associate Professor in July 2025. Before that I spent eighteen years at Bengal Institute of Technology, where I also ran examinations and led the Institutional Innovation Council.</p>
+      <p>My research asks how well a machine can recognise emotion in speech when the language has very little labelled data. Most of that work is on Bengali and Hindi, and it now extends to federated learning, multimodal sentiment analysis and Indian classical music.</p>
+      <p>I am a Fellow of the Institution of Electronics and Telecommunication Engineers (IETE) and a member of the IEM Centre of Excellence for Cloud Computing and IoT.</p>
+    </div>
+    <ul class="facts">
+      <li><span>Now</span>Associate Professor, CSE (AIML), IEM Kolkata</li>
+      <li><span>Ph.D.</span>Computer Science and Engineering, GIET University, Odisha</li>
+      <li><span>M.Tech</span>Information Technology, BESU Shibpur</li>
+      <li><span>B.Tech</span>Information Technology, BCET Durgapur</li>
+      <li><span>Fellow</span>IETE</li>
+      <li><span>Patent</span>Design registration 435995: portable machine-learning heart health monitoring device</li>
+    </ul>
+  </div>
+</section>
+
+<section id="research">
+  <div class="wrap">
+    <h2>Research</h2>
+    <ul class="areas">
+      <li><h3>Speech emotion recognition</h3><p>Cross-lingual and multilingual models that carry what they learn from one language to another, with a focus on Bengali and Hindi.</p></li>
+      <li><h3>Self-supervised speech models</h3><p>How far frozen encoders such as HuBERT and wav2vec 2.0 can go on small emotion corpora, and what it takes to deploy them.</p></li>
+      <li><h3>Federated learning</h3><p>Training emotion models across institutions and devices without moving the recordings off them.</p></li>
+      <li><h3>Multimodal sentiment and emotion</h3><p>Combining text and audio to read sarcasm, irony and other figurative language.</p></li>
+      <li><h3>Explainable AI for health</h3><p>Ensemble models for heart disease and smartphone addiction that show why they made a prediction.</p></li>
+      <li><h3>Music information retrieval</h3><p>Time and place in Indian classical music, including raga and the hour of performance.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="band" id="project">
+  <div class="wrap grant">
+    <div class="amt">Rs. 50,000<small>IEM grant-in-aid, 12 months</small></div>
+    <div>
+      <h3>Swarm Learning for Crisis Counselling (SLCC)</h3>
+      <p>I am Principal Investigator on a sanctioned project to build empathetic, decentralised AI for mental health support in crisis zones. It pairs decentralised learning with small language models that run on the device, in English, Bengali and Hindi.</p>
+    </div>
+  </div>
+</section>
+
+<section id="publications">
+  <div class="wrap">
+    <h2>Publications</h2>
+
+    <h3 class="sub">Journal articles</h3>
+    <ul class="pubs">
+      <li><span class="yr">2026</span><div><span class="t"><a href="https://doi.org/10.1007/s10772-026-10308-2">Deep multimodal K-fold model for emotion and sentiment analysis in figurative language</a></span><span class="v">Bhattacharya, S., Borah, S., &amp; Mishra, B. K. International Journal of Speech Technology, 29, 82. Springer.</span></div></li>
+      <li><span class="yr">2026</span><div><span class="t"><a href="https://doi.org/10.2174/0126662558461695260906081525">Ensemble and explainable AI-based framework for early prediction of heart disease</a><span class="st">In press</span></span><span class="v">Bhattacharya, S., and co-authors. Recent Advances in Computer Science and Communications. Bentham Science.</span></div></li>
+      <li><span class="yr">2024</span><div><span class="t">Cross-lingual deep learning model for gender-based emotion detection</span><span class="v">Bhattacharya, S., Mishra, B. K., Borah, S., Das, N., &amp; Dey, N. Multimedia Tools and Applications, 83(9), 25969–26007.</span></div></li>
+      <li><span class="yr">2023</span><div><span class="t">Deep transfer learning-based automated identification of bird song</span><span class="v">Das, N., Padhy, N., Dey, N., Bhattacharya, S., &amp; Tavares, J. M. R.</span></div></li>
+      <li><span class="yr">2022</span><div><span class="t">Emotion detection from multilingual audio using deep analysis</span><span class="v">Bhattacharya, S., Borah, S., Mishra, B. K., &amp; Mondal, A. Multimedia Tools and Applications, 81(28), 41309–41338.</span></div></li>
+      <li><span class="yr">2022</span><div><span class="t">A preliminary survey of the literature on multilingual, multimodal speech emotion detection using bibliometric and co-occurrence analysis</span><span class="v">Bhattacharya, S., Mishra, B. K., &amp; Borah, S. Mathematical Statistician and Engineering Applications, 71(3), 1962–1971.</span></div></li>
+      <li><span class="yr">2012</span><div><span class="t">OLAP based scaffolding to support personalized synchronous e-learning</span><span class="v">Sengupta, S., Mukherjee, B., Bhattacharya, S., &amp; Dasgupta, R. International Journal of Managing Information Technology, 4(3), 71.</span></div></li>
+      <li><span class="yr">2012</span><div><span class="t">A framework for automatic generation of answers to conceptual questions in FAQ based question answering system</span><span class="v">Pal, S., Bhattacharya, S., Datta, I., &amp; Chakravorty, A. International Journal of Advanced Research in Artificial Intelligence, 1(2).</span></div></li>
+    </ul>
+
+    <h3 class="sub">Conference papers</h3>
+    <ul class="pubs">
+      <li><span class="yr">2026</span><div><span class="t">A deployment-oriented recipe for low-resource speech emotion recognition: frozen HuBERT, layer-weighted pooling, and realistic-noise augmentation<span class="st">Accepted</span></span><span class="v">MINDS 2026, NSHM Knowledge Campus, Durgapur, 19–20 November 2026.</span></div></li>
+      <li><span class="yr">2026</span><div><span class="t">Predicting smartphone addiction using TabPFN-2.5 with explainable AI<span class="st">Accepted</span></span><span class="v">Bhattacharya, S., Chakraborty, S., Das, S., Dutta, S., Josh, R., Datta, S., &amp; Borah, S. International Conference on AI and Robotics (AIR 2026), Volume 2. Lecture Notes in Networks and Systems, Springer.</span></div></li>
+      <li><span class="yr">2023</span><div><span class="t">Multilingual and cross lingual audio emotion analysis using RNN</span><span class="v">Bhattacharya, S., Mishra, B. K., &amp; Borah, S. International Conference on Advances in IoT and Security with AI, pp. 171–188. Springer Nature Singapore.</span></div></li>
+      <li><span class="yr">2022</span><div><span class="t">Deep analysis for speech emotion recognization</span><span class="v">Bhattacharya, S., Borah, S., Mishra, B. K., &amp; Das, N. ICCSEA 2022, pp. 1–6. IEEE.</span></div></li>
+      <li><span class="yr">2021</span><div><span class="t">Deep classification of sound: a concise review</span><span class="v">Bhattacharya, S., Das, N., Sahu, S., Mondal, A., &amp; Borah, S. First Doctoral Symposium on Natural Computing Research (DSNCR 2020), pp. 33–43. Springer Singapore.</span></div></li>
+      <li><span class="yr">2010</span><div><span class="t">A method to extract features from handwritten signature image for signature verification</span><span class="v">Biswas, S., Bhattacharya, S., &amp; Sahu, S. NCETACS-2010, St. Anthony’s College, Shillong, pp. 9–10.</span></div></li>
+      <li><span class="yr">2009</span><div><span class="t">An analytical approach for tracking the tumor systems dynamics</span><span class="v">Bhattacharya, S., &amp; Majumder, D. World Congress on Nature &amp; Biologically Inspired Computing (NaBIC), pp. 92–97. IEEE.</span></div></li>
+    </ul>
+    <p style="margin-top:1.6rem">The full list, with citations, is on <a href="https://scholar.google.com/citations?hl=en&user=W-o_IlIAAAAJ">Google Scholar</a>.</p>
+  </div>
+</section>
+
+<section id="code">
+  <div class="wrap">
+    <h2>Open code</h2>
+    <ul class="repos">
+      <li><a href="https://github.com/sudiptai/kfold-multimodal-emotion-sentiment"><code>kfold-multimodal-emotion-sentiment</code><span>Code and data notes for the 2026 International Journal of Speech Technology paper on CMU-MOSEI.</span></a></li>
+      <li><a href="https://github.com/sudiptai/federated-ser-fedavg-fedprox"><code>federated-ser-fedavg-fedprox</code><span>FedAvg and FedProx compared for speech emotion recognition across English, Bengali and Hindi.</span></a></li>
+      <li><a href="https://github.com/sudiptai/SER_Multimodal_Analysis1"><code>SER_Multimodal_Analysis1</code><span>Frozen HuBERT recipe for low-resource speech emotion recognition on IEMOCAP and RAVDESS.</span></a></li>
+    </ul>
+    <p style="margin-top:1.6rem">More repositories are on <a href="https://github.com/sudiptai">GitHub</a>.</p>
+  </div>
+</section>
+
+<section id="teaching">
+  <div class="wrap cols">
+    <div>
+      <h2>Teaching</h2>
+      <ul class="plain">
+        <li>Data Structures and Algorithms</li>
+        <li>Programming for Problem Solving using C</li>
+        <li>Computer Vision</li>
+        <li>Machine Learning and Deep Learning</li>
+        <li>Operating Systems, Computer Networking and Computer Organization</li>
+      </ul>
+      <h3 style="margin-top:2rem">Online course</h3>
+      <p>I created <a href="https://www.udemy.com/course/python-for-data-science-basics/">Python for Data Science Basics</a> on Udemy for learners starting out in data science.</p>
+      <h3 style="margin-top:2rem">Invited talks</h3>
+      <ul class="plain">
+        <li>How to write a publishable review paper: common mistakes and proven strategies. Winter Internship (Research) Program, NextGen Research and Innovation Hub, January 2025.</li>
+        <li>LaTeX for scientific writing: a powerful tool for researchers. Innovation Hub, January 2025.</li>
+        <li>Invited talk on data science methods, ICDSM-24, December 2024.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Roles at IEM</h2>
+      <ul class="plain">
+        <li>Subject Matter Expert for Python and C across the IEM and UEM group</li>
+        <li>Member, IEM Centre of Excellence for Cloud Computing and IoT</li>
+        <li>Member, Departmental Examination Cell</li>
+        <li>Member, Departmental IQAC Cell</li>
+        <li>Social Media Adviser, IEM IEDC</li>
+        <li>IETE Student Forum</li>
+      </ul>
+      <h3 style="margin-top:2rem">Career</h3>
+      <ol class="path">
+        <li><time>2025 to now</time><p>Associate Professor, CSE (AIML), Institute of Engineering and Management, Kolkata</p></li>
+        <li><time>2022 to now</time><p>Technical Advisor, Weber Web Solutions</p></li>
+        <li><time>2019 to 2021</time><p>Co-founder, Learnin28days, a learning platform for CSE students and professionals</p></li>
+        <li><time>2015 to 2017</time><p>Co-founder, Lokalchat, e-commerce</p></li>
+        <li><time>2007 to 2025</time><p>Assistant Professor (Selection Grade from 2021), CSE and IT, Bengal Institute of Technology</p></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <h2>Write to me</h2>
+    <p>I welcome research collaborations, invited talks, and questions from students about speech and language AI.</p>
+    <a class="mail" href="mailto:bhattacharya.sudipta@gmail.com">bhattacharya.sudipta@gmail.com</a>
+    <ul class="links">
+      <li><a href="https://scholar.google.com/citations?hl=en&user=W-o_IlIAAAAJ">Google Scholar</a></li>
+      <li><a href="https://www.researchgate.net/profile/Sudipta-Bhattacharya-2">ResearchGate</a></li>
+      <li><a href="https://github.com/sudiptai">GitHub</a></li>
+      <li><a href="https://www.udemy.com/course/python-for-data-science-basics/">Udemy</a></li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">Dr. Sudipta Bhattacharya, Kolkata. Updated November 2026.</div></footer>
+</body>
+</html>
